@@ -15,6 +15,7 @@ public class InteractionSystem : MonoBehaviour
     private bool isInteracting = false;
     private PlayerController playerController;
     private ObjectiveSystem objectiveSystem;
+    private AudioSource audioSource;
 
     private void Update()
     {
@@ -32,6 +33,7 @@ public class InteractionSystem : MonoBehaviour
     {
         playerController = GetComponent<PlayerController>();
         objectiveSystem = FindFirstObjectByType<ObjectiveSystem>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void CheckForInteraction()
@@ -84,6 +86,11 @@ public class InteractionSystem : MonoBehaviour
             );
 
             return;
+        }
+
+        if (audioSource != null)
+        {
+            audioSource.Play();
         }
 
         if (interactionText != null)
