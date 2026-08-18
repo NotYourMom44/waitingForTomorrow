@@ -1563,10 +1563,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BuildingInteraction
   buildingName: Shop
-  interactionMessage: No job vacancies are available right now. Maybe check back
-    later.
-  updatesObjective: 0
-  newObjective: 
+  interactionMessage: The shop is looking for someone to help with stock, but they
+    require previous work experience. There are no positions available for you right
+    now.
+  updatesObjective: 1
+  newObjective: Find another way to gain experience.
 --- !u!1 &1709086865
 GameObject:
   m_ObjectHideFlags: 0
