@@ -14,6 +14,7 @@ public class InteractionSystem : MonoBehaviour
 
     private bool isInteracting = false;
     private PlayerController playerController;
+    private ObjectiveSystem objectiveSystem;
 
     private void Update()
     {
@@ -30,6 +31,7 @@ public class InteractionSystem : MonoBehaviour
     private void Awake()
     {
         playerController = GetComponent<PlayerController>();
+        objectiveSystem = FindFirstObjectByType<ObjectiveSystem>();
     }
 
     private void CheckForInteraction()
@@ -97,6 +99,14 @@ public class InteractionSystem : MonoBehaviour
         if (interactionPrompt != null)
         {
             interactionPrompt.SetActive(false);
+        }
+
+        if (buildingInteraction.UpdatesObjective &&
+    objectiveSystem != null)
+        {
+            objectiveSystem.SetObjective(
+                buildingInteraction.NewObjective
+            );
         }
 
         isInteracting = true;
