@@ -9,10 +9,27 @@ public class InteractionSystem : MonoBehaviour
 
     [Header("UI")]
     [SerializeField] private GameObject interactionPrompt;
+    [SerializeField] private GameObject interactionPanel;
+    [SerializeField] private TMP_Text interactionText;
+
+    private bool isInteracting = false;
+    private PlayerController playerController;
 
     private void Update()
     {
-        CheckForInteraction();
+        if (isInteracting)
+        {
+            HandleInteractionPanel();
+        }
+        else
+        {
+            CheckForInteraction();
+        }
+    }
+
+    private void Awake()
+    {
+        playerController = GetComponent<PlayerController>();
     }
 
     private void CheckForInteraction()
@@ -34,6 +51,7 @@ public class InteractionSystem : MonoBehaviour
                     Keyboard.current.eKey.wasPressedThisFrame)
                 {
                     Interact(collider.gameObject);
+                    return;
                 }
 
                 break;
@@ -48,6 +66,70 @@ public class InteractionSystem : MonoBehaviour
 
     private void Interact(GameObject interactableObject)
     {
-        Debug.Log("Interacted with: " + interactableObject.name);
+        if (interactionPrompt != null)
+        {
+            interactionPrompt.SetActive(false);
+        }
+
+        BuildingInteraction buildingInteraction =
+            interactableObject.GetComponent<BuildingInteraction>();
+
+        if (buildingInteraction == null)
+        {
+            Debug.LogWarning(
+                "No BuildingInteraction component found on " +
+                interactableObject.name
+            );
+
+            return;
+        }
+
+        if (interactionText != null)
+        {
+            interactionText.text = buildingInteraction.InteractionMessage;
+        }
+
+        if (interactionPanel != null)
+        {
+            interactionPanel.SetActive(true);
+        }
+
+        if (interactionPrompt != null)
+        {
+            interactionPrompt.SetActive(false);
+        }
+
+        isInteracting = true;
+
+        if (playerController != null)
+        {
+            playerController.SetMovementEnabled(false);
+        }
+
+        Debug.Log("Interacted with: " + buildingInteraction.BuildingName);
+    }
+
+    private void HandleInteractionPanel()
+    {
+        if (Keyboard.current != null &&
+            Keyboard.current.eKey.wasPressedThisFrame)
+        {
+            if (interactionPanel != null)
+            {
+                interactionPanel.SetActive(false);
+            }
+
+            if (interactionPrompt != null)
+            {
+                interactionPrompt.SetActive(false);
+            }
+
+            isInteracting = false;
+
+            if (playerController != null)
+            {
+                playerController.SetMovementEnabled(true);
+            }
+        }
     }
 }

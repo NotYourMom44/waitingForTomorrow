@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
 
     private CharacterController characterController;
     private Vector3 velocity;
+    private bool canMove = true;
 
     private void Awake()
     {
@@ -18,9 +19,24 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        HandleMovement();
+        if (canMove)
+        {
+            HandleMovement();
+            HandleJump();
+        }
+
         HandleGravity();
-        HandleJump();
+    }
+
+    public void SetMovementEnabled(bool enabled)
+    {
+        canMove = enabled;
+
+        if (!enabled)
+        {
+            velocity.x = 0f;
+            velocity.z = 0f;
+        }
     }
 
     private void HandleMovement()
