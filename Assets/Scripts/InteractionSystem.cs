@@ -81,10 +81,14 @@ public class InteractionSystem : MonoBehaviour
         NPCInteraction npcInteraction =
             interactableObject.GetComponent<NPCInteraction>();
 
-        if (buildingInteraction == null && npcInteraction == null)
+        TrainingComputer trainingComputer =
+            interactableObject.GetComponent<TrainingComputer>();
+
+        if (buildingInteraction == null && npcInteraction == null &&
+            trainingComputer == null)
         {
             Debug.LogWarning(
-                "No BuildingInteraction or NPCInteraction component found on " +
+                "No BuildingInteraction, NPCInteraction or TrainingComputer component found on " +
                 interactableObject.name
             );
 
@@ -137,9 +141,29 @@ public class InteractionSystem : MonoBehaviour
             );
         }
 
-        if (interactionPanel != null)
+        else if (trainingComputer != null)
         {
-            interactionPanel.SetActive(true);
+            if (interactionText != null)
+            {
+                interactionText.text = "Begin computer skills training.";
+            }
+
+            Debug.Log(
+                "Interacted with: " +
+                trainingComputer.ComputerName
+            );
+        }
+
+        if (trainingComputer != null)
+        {
+            trainingComputer.OpenTraining();
+        }
+        else
+        {
+            if (interactionPanel != null)
+            {
+                interactionPanel.SetActive(true);
+            }
         }
 
         if (interactionPrompt != null)
