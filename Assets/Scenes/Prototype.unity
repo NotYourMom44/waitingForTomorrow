@@ -1041,7 +1041,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'We''re looking for someone to help with basic administrative work.
 
-    
+
 
     Do
     you have the basic computer skills needed for the position?'
@@ -6034,6 +6034,7 @@ MonoBehaviour:
   feedbackText: {fileID: 129118850}
   continueButton: {fileID: 892916279}
   interactionSystem: {fileID: 553560265}
+  progressionSystem: {fileID: 1728816327}
   objectiveSystem: {fileID: 1099569060}
   playerController: {fileID: 553560260}
   completedObjective: Apply for the position at the local business.
@@ -6323,6 +6324,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1719801403}
   m_CullTransparentMesh: 1
+--- !u!1 &1728816326
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1728816328}
+  - component: {fileID: 1728816327}
+  m_Layer: 0
+  m_Name: GameProgression
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1728816327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1728816326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f18fb2fb1aae91840bd926abb146a16f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameProgressionSystem
+--- !u!4 &1728816328
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1728816326}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 452.88162, y: -0, z: 471.083}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1756306768
 GameObject:
   m_ObjectHideFlags: 0
@@ -6926,6 +6971,7 @@ MonoBehaviour:
   continueButton: {fileID: 525973475}
   objectiveSystem: {fileID: 1099569060}
   interactionSystem: {fileID: 553560265}
+  progressionSystem: {fileID: 1728816327}
   completedObjective: Return to the Community Centre to prepare for the next step.
 --- !u!114 &1829653962
 MonoBehaviour:
@@ -7770,3 +7816,4 @@ SceneRoots:
   - {fileID: 396180033}
   - {fileID: 1303637197}
   - {fileID: 1756306773}
+  - {fileID: 1728816328}

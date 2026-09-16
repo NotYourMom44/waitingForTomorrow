@@ -16,10 +16,13 @@ public class JobApplicationSystem : MonoBehaviour
 
     [SerializeField] private ObjectiveSystem objectiveSystem;
     [SerializeField] private InteractionSystem interactionSystem;
+    [SerializeField] private GameProgressionSystem progressionSystem;
 
     [SerializeField]
     private string completedObjective =
         "Return to the Community Centre to prepare for the next step.";
+
+    private bool applicationCanComplete = false;
 
     private void Start()
     {
@@ -58,6 +61,8 @@ public class JobApplicationSystem : MonoBehaviour
 
     public void SelectCompletedTraining()
     {
+        applicationCanComplete = true;
+
         if (feedbackText != null)
         {
             feedbackText.text =
@@ -75,6 +80,8 @@ public class JobApplicationSystem : MonoBehaviour
 
     public void SelectWillingToLearn()
     {
+        applicationCanComplete = false;
+
         if (feedbackText != null)
         {
             feedbackText.text =
@@ -118,6 +125,12 @@ public class JobApplicationSystem : MonoBehaviour
         if (interactionSystem != null)
         {
             interactionSystem.CloseJobApplication();
+        }
+
+        if (applicationCanComplete &&
+            progressionSystem != null)
+        {
+            progressionSystem.CompleteJobApplication();
         }
 
         Debug.Log("Job application completed.");

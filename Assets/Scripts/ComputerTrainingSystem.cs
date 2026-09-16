@@ -24,6 +24,7 @@ public class ComputerTrainingSystem : MonoBehaviour
     [Header("Completion")]
     [SerializeField] private GameObject continueButton;
     [SerializeField] private InteractionSystem interactionSystem;
+    [SerializeField] private GameProgressionSystem progressionSystem;
 
     [Header("Training Completion")]
     [SerializeField] private ObjectiveSystem objectiveSystem;
@@ -222,6 +223,11 @@ public class ComputerTrainingSystem : MonoBehaviour
         if (continueButton != null)
         {
             continueButton.SetActive(true);
+        }
+
+        if (progressionSystem != null)
+        {
+            progressionSystem.CompleteComputerSkills();
         }
 
         Debug.Log("Computer training completed.");
