@@ -11,6 +11,7 @@ public class InteractionSystem : MonoBehaviour
     [SerializeField] private GameObject interactionPrompt;
     [SerializeField] private GameObject interactionPanel;
     [SerializeField] private GameObject trainingPanel;
+    [SerializeField] private GameObject jobApplicationPanel;
     [SerializeField] private TMP_Text interactionText;
 
     private bool isInteracting = false;
@@ -123,23 +124,38 @@ public class InteractionSystem : MonoBehaviour
         }
         else if (npcInteraction != null)
         {
-            if (interactionText != null)
+            if (npcInteraction.OpensJobApplication)
             {
-                interactionText.text = npcInteraction.InteractionMessage;
-            }
+                if (jobApplicationPanel != null)
+                {
+                    jobApplicationPanel.SetActive(true);
+                }
 
-            if (npcInteraction.UpdatesObjective &&
-                objectiveSystem != null)
-            {
-                objectiveSystem.SetObjective(
-                    npcInteraction.NewObjective
+                Debug.Log(
+                    "Opened job application with: " +
+                    npcInteraction.NPCName
                 );
             }
+            else
+            {
+                if (interactionText != null)
+                {
+                    interactionText.text = npcInteraction.InteractionMessage;
+                }
 
-            Debug.Log(
-                "Talked to: " +
-                npcInteraction.NPCName
-            );
+                if (npcInteraction.UpdatesObjective &&
+                    objectiveSystem != null)
+                {
+                    objectiveSystem.SetObjective(
+                        npcInteraction.NewObjective
+                    );
+                }
+
+                Debug.Log(
+                    "Talked to: " +
+                    npcInteraction.NPCName
+                );
+            }
         }
 
         else if (trainingComputer != null)
@@ -158,6 +174,11 @@ public class InteractionSystem : MonoBehaviour
         if (trainingComputer != null)
         {
             trainingComputer.OpenTraining();
+        }
+        else if (npcInteraction != null &&
+                 npcInteraction.OpensJobApplication)
+        {
+            // The job application panel is already open.
         }
         else
         {
@@ -209,6 +230,26 @@ public class InteractionSystem : MonoBehaviour
         if (trainingPanel != null)
         {
             trainingPanel.SetActive(false);
+        }
+
+        if (interactionPrompt != null)
+        {
+            interactionPrompt.SetActive(false);
+        }
+
+        isInteracting = false;
+
+        if (playerController != null)
+        {
+            playerController.SetMovementEnabled(true);
+        }
+    }
+
+    public void CloseJobApplication()
+    {
+        if (jobApplicationPanel != null)
+        {
+            jobApplicationPanel.SetActive(false);
         }
 
         if (interactionPrompt != null)

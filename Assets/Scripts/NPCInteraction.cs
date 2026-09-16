@@ -17,8 +17,12 @@ public class NPCInteraction : MonoBehaviour
     [TextArea(2, 4)]
     private string newObjective;
 
+    [Header("Special Interaction")]
+    [SerializeField] private bool opensJobApplication = false;
+
     public string NPCName => npcName;
     public string InteractionMessage => interactionMessage;
     public bool UpdatesObjective => updatesObjective;
     public string NewObjective => newObjective;
+    public bool OpensJobApplication => opensJobApplication;
 }
