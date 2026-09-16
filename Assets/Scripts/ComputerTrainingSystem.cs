@@ -21,6 +21,18 @@ public class ComputerTrainingSystem : MonoBehaviour
     [Header("Feedback")]
     [SerializeField] private TMP_Text feedbackText;
 
+    [Header("Completion")]
+    [SerializeField] private GameObject continueButton;
+    [SerializeField] private InteractionSystem interactionSystem;
+
+    [Header("Training Completion")]
+    [SerializeField] private ObjectiveSystem objectiveSystem;
+    [SerializeField] private PlayerController playerController;
+
+    [SerializeField]
+    private string completedObjective =
+        "Apply for the position at the local business.";
+
     private string selectedFile = "";
 
     private int correctAnswers = 0;
@@ -55,6 +67,11 @@ public class ComputerTrainingSystem : MonoBehaviour
         SetFileButtonsInteractable(true);
 
         SetFolderButtonsInteractable(true);
+
+        if (continueButton != null)
+        {
+            continueButton.SetActive(false);
+        }
     }
 
     public void SelectCV()
@@ -199,8 +216,44 @@ public class ComputerTrainingSystem : MonoBehaviour
                 "Training complete! You have demonstrated basic computer skills.";
         }
 
+        SetFileButtonsInteractable(false);
         SetFolderButtonsInteractable(false);
 
+        if (continueButton != null)
+        {
+            continueButton.SetActive(true);
+        }
+
         Debug.Log("Computer training completed.");
+    }
+
+    public void ContinueTraining()
+    {
+        if (trainingStartPanel != null)
+        {
+            trainingStartPanel.SetActive(true);
+        }
+
+        if (fileOrganisationPanel != null)
+        {
+            fileOrganisationPanel.SetActive(false);
+        }
+
+        if (continueButton != null)
+        {
+            continueButton.SetActive(false);
+        }
+
+        if (objectiveSystem != null)
+        {
+            objectiveSystem.SetObjective(completedObjective);
+        }
+
+        if (interactionSystem != null)
+        {
+            interactionSystem.CloseTrainingInteraction();
+        }
+
+        Debug.Log("Computer training closed.");
     }
 }

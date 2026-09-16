@@ -10,6 +10,7 @@ public class InteractionSystem : MonoBehaviour
     [Header("UI")]
     [SerializeField] private GameObject interactionPrompt;
     [SerializeField] private GameObject interactionPanel;
+    [SerializeField] private GameObject trainingPanel;
     [SerializeField] private TMP_Text interactionText;
 
     private bool isInteracting = false;
@@ -200,6 +201,26 @@ public class InteractionSystem : MonoBehaviour
             {
                 playerController.SetMovementEnabled(true);
             }
+        }
+    }
+
+    public void CloseTrainingInteraction()
+    {
+        if (trainingPanel != null)
+        {
+            trainingPanel.SetActive(false);
+        }
+
+        if (interactionPrompt != null)
+        {
+            interactionPrompt.SetActive(false);
+        }
+
+        isInteracting = false;
+
+        if (playerController != null)
+        {
+            playerController.SetMovementEnabled(true);
         }
     }
 }
