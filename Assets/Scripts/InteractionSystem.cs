@@ -78,10 +78,13 @@ public class InteractionSystem : MonoBehaviour
         BuildingInteraction buildingInteraction =
             interactableObject.GetComponent<BuildingInteraction>();
 
-        if (buildingInteraction == null)
+        NPCInteraction npcInteraction =
+            interactableObject.GetComponent<NPCInteraction>();
+
+        if (buildingInteraction == null && npcInteraction == null)
         {
             Debug.LogWarning(
-                "No BuildingInteraction component found on " +
+                "No BuildingInteraction or NPCInteraction component found on " +
                 interactableObject.name
             );
 
@@ -93,9 +96,45 @@ public class InteractionSystem : MonoBehaviour
             audioSource.Play();
         }
 
-        if (interactionText != null)
+        if (buildingInteraction != null)
         {
-            interactionText.text = buildingInteraction.InteractionMessage;
+            if (interactionText != null)
+            {
+                interactionText.text = buildingInteraction.InteractionMessage;
+            }
+
+            if (buildingInteraction.UpdatesObjective &&
+                objectiveSystem != null)
+            {
+                objectiveSystem.SetObjective(
+                    buildingInteraction.NewObjective
+                );
+            }
+
+            Debug.Log(
+                "Interacted with: " +
+                buildingInteraction.BuildingName
+            );
+        }
+        else if (npcInteraction != null)
+        {
+            if (interactionText != null)
+            {
+                interactionText.text = npcInteraction.InteractionMessage;
+            }
+
+            if (npcInteraction.UpdatesObjective &&
+                objectiveSystem != null)
+            {
+                objectiveSystem.SetObjective(
+                    npcInteraction.NewObjective
+                );
+            }
+
+            Debug.Log(
+                "Talked to: " +
+                npcInteraction.NPCName
+            );
         }
 
         if (interactionPanel != null)
@@ -108,22 +147,12 @@ public class InteractionSystem : MonoBehaviour
             interactionPrompt.SetActive(false);
         }
 
-        if (buildingInteraction.UpdatesObjective &&
-    objectiveSystem != null)
-        {
-            objectiveSystem.SetObjective(
-                buildingInteraction.NewObjective
-            );
-        }
-
         isInteracting = true;
 
         if (playerController != null)
         {
             playerController.SetMovementEnabled(false);
         }
-
-        Debug.Log("Interacted with: " + buildingInteraction.BuildingName);
     }
 
     private void HandleInteractionPanel()
