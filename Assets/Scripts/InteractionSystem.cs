@@ -138,17 +138,37 @@ public class InteractionSystem : MonoBehaviour
             }
             else
             {
-                if (interactionText != null)
+                if (npcInteraction.ProgressionSystem != null &&
+                    npcInteraction.ProgressionSystem.JobApplicationCompleted)
                 {
-                    interactionText.text = npcInteraction.InteractionMessage;
-                }
+                    if (interactionText != null)
+                    {
+                        interactionText.text =
+                            npcInteraction.CompletedApplicationMessage;
+                    }
 
-                if (npcInteraction.UpdatesObjective &&
-                    objectiveSystem != null)
+                    if (objectiveSystem != null)
+                    {
+                        objectiveSystem.SetObjective(
+                            npcInteraction.CompletedApplicationObjective
+                        );
+                    }
+                }
+                else
                 {
-                    objectiveSystem.SetObjective(
-                        npcInteraction.NewObjective
-                    );
+                    if (interactionText != null)
+                    {
+                        interactionText.text =
+                            npcInteraction.InteractionMessage;
+                    }
+
+                    if (npcInteraction.UpdatesObjective &&
+                        objectiveSystem != null)
+                    {
+                        objectiveSystem.SetObjective(
+                            npcInteraction.NewObjective
+                        );
+                    }
                 }
 
                 Debug.Log(

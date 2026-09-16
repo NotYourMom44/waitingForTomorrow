@@ -509,6 +509,11 @@ MonoBehaviour:
   updatesObjective: 1
   newObjective: Visit the Community Centre to learn more about the job opportunity.
   opensJobApplication: 0
+  progressionSystem: {fileID: 0}
+  completedApplicationMessage: The business is ready to move forward with your application.
+    Before the interview, make sure you have your CV, ID, and proof of your training
+    ready.
+  completedApplicationObjective: Prepare your documents for the interview.
 --- !u!136 &75970683
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1562,6 +1567,11 @@ MonoBehaviour:
   updatesObjective: 1
   newObjective: Complete the computer skills training at the Community Centre.
   opensJobApplication: 0
+  progressionSystem: {fileID: 1728816327}
+  completedApplicationMessage: The business is ready to move forward with your application.
+    Before the interview, make sure you have your CV, ID, and proof of your training
+    ready.
+  completedApplicationObjective: Prepare your documents for the interview.
 --- !u!136 &396180030
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -6406,6 +6416,11 @@ MonoBehaviour:
   updatesObjective: 0
   newObjective: 
   opensJobApplication: 1
+  progressionSystem: {fileID: 0}
+  completedApplicationMessage: The business is ready to move forward with your application.
+    Before the interview, make sure you have your CV, ID, and proof of your training
+    ready.
+  completedApplicationObjective: Prepare your documents for the interview.
 --- !u!136 &1756306770
 CapsuleCollider:
   m_ObjectHideFlags: 0
