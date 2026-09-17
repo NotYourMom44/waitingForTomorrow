@@ -84,6 +84,8 @@ public class PlayerController : MonoBehaviour
 
     private void HandleJump()
     {
+        Debug.Log("Grounded: " + characterController.isGrounded);
+
         if (characterController.isGrounded &&
             Keyboard.current != null &&
             Keyboard.current.spaceKey.wasPressedThisFrame)
