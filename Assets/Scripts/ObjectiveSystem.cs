@@ -12,9 +12,31 @@ public class ObjectiveSystem : MonoBehaviour
     private string startingObjective =
         "Find someone who can help you find work.";
 
+    [Header("Document Progression")]
+    [SerializeField] private GameProgressionSystem progressionSystem;
+
+    [TextArea(2, 4)]
+    [SerializeField]
+    private string documentsObjective =
+        "Find your CV, ID copy, and training certificate.";
+
+    [TextArea(2, 4)]
+    [SerializeField]
+    private string documentsCompletedObjective =
+        "Return to the business for your interview.";
+
     private void Start()
     {
         SetObjective(startingObjective);
+    }
+
+    private void Update()
+    {
+        if (progressionSystem != null &&
+            progressionSystem.AllDocumentsCollected())
+        {
+            SetObjective(documentsCompletedObjective);
+        }
     }
 
     public void SetObjective(string newObjective)
@@ -23,5 +45,10 @@ public class ObjectiveSystem : MonoBehaviour
         {
             objectiveText.text = "Objective:\n" + newObjective;
         }
+    }
+
+    public void SetDocumentsObjective()
+    {
+        SetObjective(documentsObjective);
     }
 }

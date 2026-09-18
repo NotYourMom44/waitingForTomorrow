@@ -86,11 +86,16 @@ public class InteractionSystem : MonoBehaviour
         TrainingComputer trainingComputer =
             interactableObject.GetComponent<TrainingComputer>();
 
-        if (buildingInteraction == null && npcInteraction == null &&
-            trainingComputer == null)
+        DocumentInteraction documentInteraction =
+            interactableObject.GetComponent<DocumentInteraction>();
+
+        if (buildingInteraction == null &&
+            npcInteraction == null &&
+            trainingComputer == null &&
+            documentInteraction == null)
         {
             Debug.LogWarning(
-                "No BuildingInteraction, NPCInteraction or TrainingComputer component found on " +
+                "No supported interaction component found on " +
                 interactableObject.name
             );
 
@@ -106,7 +111,8 @@ public class InteractionSystem : MonoBehaviour
         {
             if (interactionText != null)
             {
-                interactionText.text = buildingInteraction.InteractionMessage;
+                interactionText.text =
+                    buildingInteraction.InteractionMessage;
             }
 
             if (buildingInteraction.UpdatesObjective &&
@@ -177,17 +183,34 @@ public class InteractionSystem : MonoBehaviour
                 );
             }
         }
-
         else if (trainingComputer != null)
         {
             if (interactionText != null)
             {
-                interactionText.text = "Begin computer skills training.";
+                interactionText.text =
+                    "Begin computer skills training.";
             }
 
             Debug.Log(
                 "Interacted with: " +
                 trainingComputer.ComputerName
+            );
+        }
+        else if (documentInteraction != null)
+        {
+            if (interactionText != null)
+            {
+                interactionText.text =
+                    documentInteraction.DocumentName +
+                    "\n\n" +
+                    documentInteraction.InteractionMessage;
+            }
+
+            documentInteraction.Collect();
+
+            Debug.Log(
+                "Collected document: " +
+                documentInteraction.DocumentName
             );
         }
 
