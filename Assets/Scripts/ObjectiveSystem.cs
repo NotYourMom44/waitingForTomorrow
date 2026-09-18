@@ -32,8 +32,13 @@ public class ObjectiveSystem : MonoBehaviour
 
     private void Update()
     {
-        if (progressionSystem != null &&
-            progressionSystem.AllDocumentsCollected())
+        if (progressionSystem == null)
+            return;
+
+        if (progressionSystem.InterviewStarted)
+            return;
+
+        if (progressionSystem.AllDocumentsCollected())
         {
             SetObjective(documentsCompletedObjective);
         }

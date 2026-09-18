@@ -9,8 +9,24 @@ public class CameraController : MonoBehaviour
     [SerializeField] private Vector3 offset = new Vector3(0f, 5f, -7f);
     [SerializeField] private float followSpeed = 10f;
 
+    [Header("Interview Camera")]
+    [SerializeField] private Transform interviewCameraPosition;
+
+    private bool interviewMode = false;
+
     private void LateUpdate()
     {
+        if (interviewMode)
+        {
+            if (interviewCameraPosition == null)
+                return;
+
+            transform.position = interviewCameraPosition.position;
+            transform.rotation = interviewCameraPosition.rotation;
+
+            return;
+        }
+
         if (player == null)
             return;
 
@@ -23,5 +39,10 @@ public class CameraController : MonoBehaviour
         );
 
         transform.LookAt(player.position);
+    }
+
+    public void SetInterviewMode(bool enabled)
+    {
+        interviewMode = enabled;
     }
 }

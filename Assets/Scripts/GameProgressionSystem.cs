@@ -9,6 +9,8 @@ public class GameProgressionSystem : MonoBehaviour
     public bool IDCollected { get; private set; }
     public bool TrainingCertificateCollected { get; private set; }
 
+    public bool InterviewStarted { get; private set; }
+
     public void CompleteComputerSkills()
     {
         ComputerSkillsCompleted = true;
@@ -44,5 +46,11 @@ public class GameProgressionSystem : MonoBehaviour
         return CVCollected &&
                IDCollected &&
                TrainingCertificateCollected;
+    }
+
+    public void StartInterview()
+    {
+        InterviewStarted = true;
+        Debug.Log("Interview started.");
     }
 }

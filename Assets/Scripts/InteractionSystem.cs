@@ -132,15 +132,67 @@ public class InteractionSystem : MonoBehaviour
         {
             if (npcInteraction.OpensJobApplication)
             {
-                if (jobApplicationPanel != null)
+                if (npcInteraction.ProgressionSystem != null &&
+                    npcInteraction.ProgressionSystem.JobApplicationCompleted)
                 {
-                    jobApplicationPanel.SetActive(true);
-                }
+                    if (npcInteraction.ProgressionSystem.AllDocumentsCollected())
+                    {
+                        if (interactionText != null)
+                        {
+                            interactionText.text =
+                                npcInteraction.ReadyForInterviewMessage;
+                        }
 
-                Debug.Log(
-                    "Opened job application with: " +
-                    npcInteraction.NPCName
-                );
+                        npcInteraction.ProgressionSystem.StartInterview();
+
+                        if (objectiveSystem != null)
+                        {
+                            objectiveSystem.SetObjective(
+                                npcInteraction.ReadyForInterviewObjective
+                            );
+                        }
+
+                        if (npcInteraction.InterviewSystem != null)
+                        {
+                            npcInteraction.InterviewSystem.OpenInterview();
+                        }
+
+                        Debug.Log(
+                            "Business Manager: Player is ready for interview."
+                        );
+                    }
+                    else
+                    {
+                        if (interactionText != null)
+                        {
+                            interactionText.text =
+                                npcInteraction.CompletedApplicationMessage;
+                        }
+
+                        if (objectiveSystem != null)
+                        {
+                            objectiveSystem.SetObjective(
+                                npcInteraction.CompletedApplicationObjective
+                            );
+                        }
+
+                        Debug.Log(
+                            "Business Manager: Documents are still missing."
+                        );
+                    }
+                }
+                else
+                {
+                    if (jobApplicationPanel != null)
+                    {
+                        jobApplicationPanel.SetActive(true);
+                    }
+
+                    Debug.Log(
+                        "Opened job application with: " +
+                        npcInteraction.NPCName
+                    );
+                }
             }
             else
             {
@@ -219,7 +271,9 @@ public class InteractionSystem : MonoBehaviour
             trainingComputer.OpenTraining();
         }
         else if (npcInteraction != null &&
-                 npcInteraction.OpensJobApplication)
+                 npcInteraction.OpensJobApplication &&
+                 npcInteraction.ProgressionSystem != null &&
+                 !npcInteraction.ProgressionSystem.JobApplicationCompleted)
         {
             // The job application panel is already open.
         }

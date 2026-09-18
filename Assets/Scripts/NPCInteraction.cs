@@ -33,13 +33,30 @@ public class NPCInteraction : MonoBehaviour
     private string completedApplicationObjective =
         "Prepare your documents for the interview.";
 
+    [Header("Interview Progression")]
+    [SerializeField]
+    [TextArea(2, 5)]
+    private string readyForInterviewMessage =
+        "Good, you have everything you need. Let's begin the interview.";
+
+    [SerializeField]
+    [TextArea(2, 4)]
+    private string readyForInterviewObjective =
+        "Complete your interview.";
+
+    [Header("Interview System")]
+    [SerializeField] private InterviewSystem interviewSystem;
+
+    public InterviewSystem InterviewSystem => interviewSystem;
+
     public string NPCName => npcName;
     public string InteractionMessage => interactionMessage;
     public bool UpdatesObjective => updatesObjective;
     public string NewObjective => newObjective;
     public bool OpensJobApplication => opensJobApplication;
-
     public GameProgressionSystem ProgressionSystem => progressionSystem;
     public string CompletedApplicationMessage => completedApplicationMessage;
     public string CompletedApplicationObjective => completedApplicationObjective;
+    public string ReadyForInterviewMessage => readyForInterviewMessage;
+    public string ReadyForInterviewObjective => readyForInterviewObjective;
 }
