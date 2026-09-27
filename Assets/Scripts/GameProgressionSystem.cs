@@ -11,6 +11,12 @@ public class GameProgressionSystem : MonoBehaviour
 
     public bool InterviewStarted { get; private set; }
 
+    public bool WorkshopLeadReceived { get; private set; }
+
+    public int WorkshopPanelsCollected { get; private set; }
+
+    public bool WorkshopCrateAssembled { get; private set; }
+
     public void CompleteComputerSkills()
     {
         ComputerSkillsCompleted = true;
@@ -52,5 +58,28 @@ public class GameProgressionSystem : MonoBehaviour
     {
         InterviewStarted = true;
         Debug.Log("Interview started.");
+    }
+
+    public void ReceiveWorkshopLead()
+    {
+        WorkshopLeadReceived = true;
+        Debug.Log("Workshop lead received.");
+    }
+
+    public void CollectWorkshopPanel()
+    {
+        WorkshopPanelsCollected++;
+
+        Debug.Log(
+            "Workshop panel collected. Total: " +
+            WorkshopPanelsCollected
+        );
+    }
+
+    public void CompleteWorkshopAssembly()
+    {
+        WorkshopCrateAssembled = true;
+
+        Debug.Log("Workshop crate assembly completed.");
     }
 }

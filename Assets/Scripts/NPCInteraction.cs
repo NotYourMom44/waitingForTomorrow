@@ -19,9 +19,23 @@ public class NPCInteraction : MonoBehaviour
 
     [Header("Special Interaction")]
     [SerializeField] private bool opensJobApplication = false;
+    [SerializeField] private bool providesWorkshopLead = false;
+
+    [SerializeField] private bool completesWorkshopTask = false;
 
     [Header("Progression Dialogue")]
     [SerializeField] private GameProgressionSystem progressionSystem;
+
+    [Header("Workshop Completion Dialogue")]
+    [SerializeField]
+    [TextArea(2, 5)]
+    private string workshopCompletionMessage =
+    "Good work. You followed the instructions and completed the job. That's the kind of practical experience you can build on.";
+
+    [SerializeField]
+    [TextArea(2, 4)]
+    private string workshopCompletionObjective =
+        "Continue looking for opportunities to gain work experience.";
 
     [SerializeField]
     [TextArea(2, 5)]
@@ -54,9 +68,15 @@ public class NPCInteraction : MonoBehaviour
     public bool UpdatesObjective => updatesObjective;
     public string NewObjective => newObjective;
     public bool OpensJobApplication => opensJobApplication;
+    public bool ProvidesWorkshopLead => providesWorkshopLead;
+
+    public bool CompletesWorkshopTask => completesWorkshopTask;
     public GameProgressionSystem ProgressionSystem => progressionSystem;
     public string CompletedApplicationMessage => completedApplicationMessage;
     public string CompletedApplicationObjective => completedApplicationObjective;
+
+    public string WorkshopCompletionMessage => workshopCompletionMessage;
+    public string WorkshopCompletionObjective => workshopCompletionObjective;
     public string ReadyForInterviewMessage => readyForInterviewMessage;
     public string ReadyForInterviewObjective => readyForInterviewObjective;
 }

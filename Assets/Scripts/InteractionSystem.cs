@@ -89,10 +89,18 @@ public class InteractionSystem : MonoBehaviour
         DocumentInteraction documentInteraction =
             interactableObject.GetComponent<DocumentInteraction>();
 
+        WorkshopPanelInteraction workshopPanelInteraction =
+            interactableObject.GetComponent<WorkshopPanelInteraction>();
+
+        WorkshopWorkbenchInteraction workshopWorkbenchInteraction =
+            interactableObject.GetComponent<WorkshopWorkbenchInteraction>();
+
         if (buildingInteraction == null &&
             npcInteraction == null &&
             trainingComputer == null &&
-            documentInteraction == null)
+            documentInteraction == null &&
+            workshopPanelInteraction == null &&
+            workshopWorkbenchInteraction == null)
         {
             Debug.LogWarning(
                 "No supported interaction component found on " +
@@ -194,6 +202,84 @@ public class InteractionSystem : MonoBehaviour
                     );
                 }
             }
+
+            else if (npcInteraction.CompletesWorkshopTask)
+            {
+                if (npcInteraction.ProgressionSystem != null &&
+                    npcInteraction.ProgressionSystem.WorkshopCrateAssembled)
+                {
+                    if (interactionText != null)
+                    {
+                        interactionText.text =
+                            npcInteraction.WorkshopCompletionMessage;
+                    }
+
+                    if (objectiveSystem != null)
+                    {
+                        objectiveSystem.SetObjective(
+                            npcInteraction.WorkshopCompletionObjective
+                        );
+                    }
+
+                    Debug.Log(
+                        "Workshop Owner: Player completed the practical workshop task."
+                    );
+                }
+                else
+                {
+                    if (interactionText != null)
+                    {
+                        interactionText.text =
+                            "Keep working on the practical task.";
+                    }
+
+                    Debug.Log(
+                        "Workshop Owner: Practical workshop task is not completed yet."
+                    );
+                }
+            }
+
+            else if (npcInteraction.ProvidesWorkshopLead)
+            {
+                if (npcInteraction.ProgressionSystem != null &&
+                    npcInteraction.ProgressionSystem.WorkshopLeadReceived)
+                {
+                    if (interactionText != null)
+                    {
+                        interactionText.text =
+                            "I hope the workshop can help you gain some practical experience.";
+                    }
+
+                    Debug.Log(
+                        "Workshop Owner: Workshop lead has already been received."
+                    );
+                }
+                else
+                {
+                    if (interactionText != null)
+                    {
+                        interactionText.text =
+                            npcInteraction.InteractionMessage;
+                    }
+
+                    if (npcInteraction.ProgressionSystem != null)
+                    {
+                        npcInteraction.ProgressionSystem.ReceiveWorkshopLead();
+                    }
+
+                    if (objectiveSystem != null &&
+                        npcInteraction.UpdatesObjective)
+                    {
+                        objectiveSystem.SetObjective(
+                            npcInteraction.NewObjective
+                        );
+                    }
+
+                    Debug.Log(
+                        "Workshop Owner: Player received the workshop lead."
+                    );
+                }
+            }
             else
             {
                 if (npcInteraction.ProgressionSystem != null &&
@@ -266,6 +352,45 @@ public class InteractionSystem : MonoBehaviour
             );
         }
 
+        else if (workshopPanelInteraction != null)
+        {
+            if (interactionText != null)
+            {
+                interactionText.text =
+                    workshopPanelInteraction.PanelName +
+                    "\n\n" +
+                    workshopPanelInteraction.InteractionMessage;
+            }
+
+            workshopPanelInteraction.Collect();
+
+            Debug.Log(
+                "Collected workshop panel: " +
+                workshopPanelInteraction.PanelName
+            );
+        }
+
+        else if (workshopWorkbenchInteraction != null)
+        {
+            if (interactionText != null)
+            {
+                interactionText.text =
+                    workshopWorkbenchInteraction.WorkbenchName +
+                    "\n\n" +
+                    workshopWorkbenchInteraction.InteractionMessage;
+            }
+
+            if (workshopWorkbenchInteraction.AssemblySystem != null)
+            {
+                workshopWorkbenchInteraction.AssemblySystem.OpenAssembly();
+            }
+
+            Debug.Log(
+                "Opened crate assembly at workbench: " +
+                workshopWorkbenchInteraction.WorkbenchName
+            );
+        }
+
         if (trainingComputer != null)
         {
             trainingComputer.OpenTraining();
@@ -277,7 +402,7 @@ public class InteractionSystem : MonoBehaviour
         {
             // The job application panel is already open.
         }
-        else
+        else if (workshopWorkbenchInteraction == null)
         {
             if (interactionPanel != null)
             {
@@ -360,5 +485,22 @@ public class InteractionSystem : MonoBehaviour
         {
             playerController.SetMovementEnabled(true);
         }
+    }
+
+    public void CloseWorkshopAssembly()
+    {
+        isInteracting = false;
+
+        if (playerController != null)
+        {
+            playerController.SetMovementEnabled(true);
+        }
+
+        if (interactionPrompt != null)
+        {
+            interactionPrompt.SetActive(false);
+        }
+
+        Debug.Log("Workshop assembly interaction closed.");
     }
 }
