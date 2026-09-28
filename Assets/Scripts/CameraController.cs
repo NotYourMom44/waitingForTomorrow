@@ -5,9 +5,10 @@ public class CameraController : MonoBehaviour
     [Header("Target")]
     [SerializeField] private Transform player;
 
-    [Header("Camera Settings")]
-    [SerializeField] private Vector3 offset = new Vector3(0f, 5f, -7f);
-    [SerializeField] private float followSpeed = 10f;
+    [Header("First Person Camera")]
+    [SerializeField]
+    private Vector3 firstPersonOffset =
+        new Vector3(0f, 3.8f, 0.35f);
 
     [Header("Interview Camera")]
     [SerializeField] private Transform interviewCameraPosition;
@@ -21,8 +22,11 @@ public class CameraController : MonoBehaviour
             if (interviewCameraPosition == null)
                 return;
 
-            transform.position = interviewCameraPosition.position;
-            transform.rotation = interviewCameraPosition.rotation;
+            transform.position =
+                interviewCameraPosition.position;
+
+            transform.rotation =
+                interviewCameraPosition.rotation;
 
             return;
         }
@@ -30,15 +34,8 @@ public class CameraController : MonoBehaviour
         if (player == null)
             return;
 
-        Vector3 targetPosition = player.position + offset;
-
-        transform.position = Vector3.Lerp(
-            transform.position,
-            targetPosition,
-            followSpeed * Time.deltaTime
-        );
-
-        transform.LookAt(player.position);
+        transform.position =
+            player.TransformPoint(firstPersonOffset);
     }
 
     public void SetInterviewMode(bool enabled)

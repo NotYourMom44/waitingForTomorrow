@@ -8,9 +8,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jumpHeight = 1.5f;
     [SerializeField] private float gravity = -20f;
 
+    [Header("Mouse Look")]
+    [SerializeField] private float mouseSensitivity = 5f;
+    [SerializeField] private Transform cameraTransform;
+
     private CharacterController characterController;
     private Vector3 velocity;
     private bool canMove = true;
+    private float cameraPitch = 0f;
 
     private void Awake()
     {
@@ -23,6 +28,7 @@ public class PlayerController : MonoBehaviour
         {
             HandleMovement();
             HandleJump();
+            HandleMouseLook();
         }
 
         HandleGravity();
@@ -45,8 +51,6 @@ public class PlayerController : MonoBehaviour
 
         if (Keyboard.current != null)
         {
-            input = Vector2.zero;
-
             if (Keyboard.current.aKey.isPressed)
                 input.x -= 1f;
 
@@ -60,14 +64,55 @@ public class PlayerController : MonoBehaviour
                 input.y += 1f;
         }
 
-        Vector3 movement = new Vector3(input.x, 0f, input.y);
+        Vector3 movement = new Vector3(
+            input.x,
+            0f,
+            input.y
+        );
 
         if (movement.magnitude > 1f)
         {
             movement.Normalize();
         }
 
-        characterController.Move(movement * moveSpeed * Time.deltaTime);
+        movement = transform.TransformDirection(movement);
+
+        characterController.Move(
+            movement * moveSpeed * Time.deltaTime
+        );
+    }
+
+    private void HandleMouseLook()
+    {
+        if (Mouse.current == null)
+            return;
+
+        Vector2 mouseDelta = Mouse.current.delta.ReadValue();
+
+        float mouseX =
+            mouseDelta.x * mouseSensitivity * Time.deltaTime;
+
+        float mouseY =
+            mouseDelta.y * mouseSensitivity * Time.deltaTime;
+
+        transform.Rotate(Vector3.up * mouseX);
+
+        cameraPitch -= mouseY;
+        cameraPitch = Mathf.Clamp(
+            cameraPitch,
+            -65f,
+            80f
+        );
+
+        if (cameraTransform != null)
+        {
+            cameraTransform.rotation =
+                Quaternion.Euler(
+                    cameraPitch,
+                    transform.eulerAngles.y,
+                    0f
+                );
+        }
     }
 
     private void HandleGravity()
@@ -79,18 +124,26 @@ public class PlayerController : MonoBehaviour
 
         velocity.y += gravity * Time.deltaTime;
 
-        characterController.Move(velocity * Time.deltaTime);
+        characterController.Move(
+            velocity * Time.deltaTime
+        );
     }
 
     private void HandleJump()
     {
-        Debug.Log("Grounded: " + characterController.isGrounded);
+        Debug.Log(
+            "Grounded: " +
+            characterController.isGrounded
+        );
 
         if (characterController.isGrounded &&
             Keyboard.current != null &&
             Keyboard.current.spaceKey.wasPressedThisFrame)
         {
-            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            velocity.y =
+                Mathf.Sqrt(
+                    jumpHeight * -2f * gravity
+                );
         }
     }
 }
