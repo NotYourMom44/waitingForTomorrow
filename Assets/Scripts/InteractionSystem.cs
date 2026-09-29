@@ -140,7 +140,56 @@ public class InteractionSystem : MonoBehaviour
         }
         else if (npcInteraction != null)
         {
-            if (npcInteraction.OpensJobApplication)
+            if (npcInteraction.HandlesDocumentPayment)
+            {
+                if (npcInteraction.ProgressionSystem != null &&
+                    npcInteraction.ProgressionSystem.DocumentExpensePaid)
+                {
+                    if (interactionText != null)
+                    {
+                        interactionText.text =
+                            "Your documents have already been printed and copied.";
+                    }
+
+                    Debug.Log(
+                        "Print Shop Clerk: Document printing and copying has already been paid for."
+                    );
+                }
+                else if (moneyManager != null &&
+                         moneyManager.CanAfford(50))
+                {
+                    moneyManager.SpendMoney(50);
+
+                    if (npcInteraction.ProgressionSystem != null)
+                    {
+                        npcInteraction.ProgressionSystem.MarkDocumentExpensePaid();
+                    }
+
+                    if (interactionText != null)
+                    {
+                        interactionText.text =
+                            "Sure, I can print and copy those for you. It'll be R50.\n\n" +
+                            "There you go. That's everything.";
+                    }
+
+                    Debug.Log(
+                        "Print Shop Clerk: Player paid R50 for document printing and copying."
+                    );
+                }
+                else
+                {
+                    if (interactionText != null)
+                    {
+                        interactionText.text =
+                            "Sorry, you need R50 for the printing and copying.";
+                    }
+
+                    Debug.Log(
+                        "Print Shop Clerk: Player cannot afford the R50 document expense."
+                    );
+                }
+            }
+            else if (npcInteraction.OpensJobApplication)
             {
                 if (npcInteraction.ProgressionSystem != null &&
                     npcInteraction.ProgressionSystem.JobApplicationCompleted)

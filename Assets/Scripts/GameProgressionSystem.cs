@@ -19,6 +19,8 @@ public class GameProgressionSystem : MonoBehaviour
 
     public bool WorkshopPaymentReceived { get; private set; }
 
+    public bool DocumentExpensePaid { get; private set; }
+
     public void CompleteComputerSkills()
     {
         ComputerSkillsCompleted = true;
@@ -90,5 +92,12 @@ public class GameProgressionSystem : MonoBehaviour
         WorkshopPaymentReceived = true;
 
         Debug.Log("Workshop payment received.");
+    }
+
+    public void MarkDocumentExpensePaid()
+    {
+        DocumentExpensePaid = true;
+
+        Debug.Log("R50 document printing/copying expense paid.");
     }
 }

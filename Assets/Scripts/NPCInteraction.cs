@@ -20,6 +20,7 @@ public class NPCInteraction : MonoBehaviour
     [Header("Special Interaction")]
     [SerializeField] private bool opensJobApplication = false;
     [SerializeField] private bool providesWorkshopLead = false;
+    [SerializeField] private bool handlesDocumentPayment = false;
 
     [SerializeField] private bool completesWorkshopTask = false;
 
@@ -69,6 +70,8 @@ public class NPCInteraction : MonoBehaviour
     public string NewObjective => newObjective;
     public bool OpensJobApplication => opensJobApplication;
     public bool ProvidesWorkshopLead => providesWorkshopLead;
+
+    public bool HandlesDocumentPayment => handlesDocumentPayment;
 
     public bool CompletesWorkshopTask => completesWorkshopTask;
     public GameProgressionSystem ProgressionSystem => progressionSystem;

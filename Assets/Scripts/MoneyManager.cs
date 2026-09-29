@@ -20,6 +20,11 @@ public class MoneyManager : MonoBehaviour
         UpdateMoneyUI();
     }
 
+    public bool CanAfford(int amount)
+    {
+        return currentMoney >= amount;
+    }
+
     public void SpendMoney(int amount)
     {
         currentMoney -= amount;
