@@ -6,9 +6,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] private Transform player;
 
     [Header("First Person Camera")]
-    [SerializeField]
-    private Vector3 firstPersonOffset =
-        new Vector3(0f, 3.8f, 0.35f);
+    [SerializeField] private Transform head;
 
     [Header("Interview Camera")]
     [SerializeField] private Transform interviewCameraPosition;
@@ -31,11 +29,10 @@ public class CameraController : MonoBehaviour
             return;
         }
 
-        if (player == null)
+        if (head == null)
             return;
 
-        transform.position =
-            player.TransformPoint(firstPersonOffset);
+        transform.position = head.position;
     }
 
     public void SetInterviewMode(bool enabled)

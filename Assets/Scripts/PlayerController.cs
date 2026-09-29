@@ -5,12 +5,16 @@ public class PlayerController : MonoBehaviour
 {
     [Header("Movement")]
     [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private float sprintSpeed = 8f;
     [SerializeField] private float jumpHeight = 1.5f;
     [SerializeField] private float gravity = -20f;
 
     [Header("Mouse Look")]
     [SerializeField] private float mouseSensitivity = 5f;
     [SerializeField] private Transform cameraTransform;
+
+    [Header("Animation")]
+    [SerializeField] private Animator animator;
 
     private CharacterController characterController;
     private Vector3 velocity;
@@ -20,6 +24,11 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
+
+        if (animator == null)
+        {
+            animator = GetComponentInChildren<Animator>();
+        }
     }
 
     private void Update()
@@ -32,6 +41,7 @@ public class PlayerController : MonoBehaviour
         }
 
         HandleGravity();
+        UpdateAnimation();
     }
 
     public void SetMovementEnabled(bool enabled)
@@ -42,6 +52,11 @@ public class PlayerController : MonoBehaviour
         {
             velocity.x = 0f;
             velocity.z = 0f;
+
+            if (animator != null)
+            {
+                animator.SetFloat("Speed", 0f);
+            }
         }
     }
 
@@ -77,8 +92,16 @@ public class PlayerController : MonoBehaviour
 
         movement = transform.TransformDirection(movement);
 
+        bool isSprinting =
+            Keyboard.current != null &&
+            Keyboard.current.leftShiftKey.isPressed &&
+            input.magnitude > 0f;
+
+        float currentSpeed =
+            isSprinting ? sprintSpeed : moveSpeed;
+
         characterController.Move(
-            movement * moveSpeed * Time.deltaTime
+            movement * currentSpeed * Time.deltaTime
         );
     }
 
@@ -98,6 +121,7 @@ public class PlayerController : MonoBehaviour
         transform.Rotate(Vector3.up * mouseX);
 
         cameraPitch -= mouseY;
+
         cameraPitch = Mathf.Clamp(
             cameraPitch,
             -65f,
@@ -131,11 +155,6 @@ public class PlayerController : MonoBehaviour
 
     private void HandleJump()
     {
-        Debug.Log(
-            "Grounded: " +
-            characterController.isGrounded
-        );
-
         if (characterController.isGrounded &&
             Keyboard.current != null &&
             Keyboard.current.spaceKey.wasPressedThisFrame)
@@ -145,5 +164,48 @@ public class PlayerController : MonoBehaviour
                     jumpHeight * -2f * gravity
                 );
         }
+    }
+
+    private void UpdateAnimation()
+    {
+        if (animator == null)
+            return;
+
+        Vector2 input = Vector2.zero;
+
+        if (Keyboard.current != null)
+        {
+            if (Keyboard.current.aKey.isPressed)
+                input.x -= 1f;
+
+            if (Keyboard.current.dKey.isPressed)
+                input.x += 1f;
+
+            if (Keyboard.current.sKey.isPressed)
+                input.y -= 1f;
+
+            if (Keyboard.current.wKey.isPressed)
+                input.y += 1f;
+        }
+
+        bool hasMovementInput = input.magnitude > 0f;
+
+        bool isSprinting =
+            Keyboard.current != null &&
+            Keyboard.current.leftShiftKey.isPressed &&
+            hasMovementInput;
+
+        float animationSpeed = 0f;
+
+        if (hasMovementInput)
+        {
+            animationSpeed = isSprinting ? 2f : 1f;
+        }
+
+        animator.SetFloat("Speed", animationSpeed);
+        animator.SetBool(
+            "IsGrounded",
+            characterController.isGrounded
+        );
     }
 }
