@@ -163,6 +163,14 @@ public class InteractionSystem : MonoBehaviour
                     if (npcInteraction.ProgressionSystem != null)
                     {
                         npcInteraction.ProgressionSystem.MarkDocumentExpensePaid();
+                        npcInteraction.ProgressionSystem.UnlockNewJobOpportunity();
+                    }
+
+                    if (objectiveSystem != null)
+                    {
+                        objectiveSystem.SetObjective(
+                            npcInteraction.NewJobOpportunityObjective
+                        );
                     }
 
                     if (interactionText != null)
@@ -573,5 +581,25 @@ public class InteractionSystem : MonoBehaviour
         }
 
         Debug.Log("Workshop assembly interaction closed.");
+    }
+
+    public void ShowMessage(string message)
+    {
+        if (interactionText != null)
+        {
+            interactionText.text = message;
+        }
+
+        if (interactionPanel != null)
+        {
+            interactionPanel.SetActive(true);
+        }
+
+        isInteracting = true;
+
+        if (playerController != null)
+        {
+            playerController.SetMovementEnabled(false);
+        }
     }
 }

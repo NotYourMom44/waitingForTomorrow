@@ -48,6 +48,11 @@ public class NPCInteraction : MonoBehaviour
     private string completedApplicationObjective =
         "Prepare your documents for the interview.";
 
+    [SerializeField]
+    [TextArea(2, 4)]
+    private string newJobOpportunityObjective =
+    "Look for the new job opportunity.";
+
     [Header("Interview Progression")]
     [SerializeField]
     [TextArea(2, 5)]
@@ -77,6 +82,8 @@ public class NPCInteraction : MonoBehaviour
     public GameProgressionSystem ProgressionSystem => progressionSystem;
     public string CompletedApplicationMessage => completedApplicationMessage;
     public string CompletedApplicationObjective => completedApplicationObjective;
+
+    public string NewJobOpportunityObjective => newJobOpportunityObjective;
 
     public string WorkshopCompletionMessage => workshopCompletionMessage;
     public string WorkshopCompletionObjective => workshopCompletionObjective;

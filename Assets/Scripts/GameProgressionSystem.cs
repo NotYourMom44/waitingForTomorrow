@@ -21,6 +21,8 @@ public class GameProgressionSystem : MonoBehaviour
 
     public bool DocumentExpensePaid { get; private set; }
 
+    public bool NewJobOpportunityUnlocked { get; private set; }
+
     public void CompleteComputerSkills()
     {
         ComputerSkillsCompleted = true;
@@ -99,5 +101,12 @@ public class GameProgressionSystem : MonoBehaviour
         DocumentExpensePaid = true;
 
         Debug.Log("R50 document printing/copying expense paid.");
+    }
+
+    public void UnlockNewJobOpportunity()
+    {
+        NewJobOpportunityUnlocked = true;
+
+        Debug.Log("New job opportunity unlocked.");
     }
 }
