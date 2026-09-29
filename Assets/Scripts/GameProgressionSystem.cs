@@ -17,6 +17,8 @@ public class GameProgressionSystem : MonoBehaviour
 
     public bool WorkshopCrateAssembled { get; private set; }
 
+    public bool WorkshopPaymentReceived { get; private set; }
+
     public void CompleteComputerSkills()
     {
         ComputerSkillsCompleted = true;
@@ -81,5 +83,12 @@ public class GameProgressionSystem : MonoBehaviour
         WorkshopCrateAssembled = true;
 
         Debug.Log("Workshop crate assembly completed.");
+    }
+
+    public void MarkWorkshopPaymentReceived()
+    {
+        WorkshopPaymentReceived = true;
+
+        Debug.Log("Workshop payment received.");
     }
 }

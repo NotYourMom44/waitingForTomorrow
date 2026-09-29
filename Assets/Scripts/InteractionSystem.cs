@@ -18,6 +18,7 @@ public class InteractionSystem : MonoBehaviour
     private PlayerController playerController;
     private ObjectiveSystem objectiveSystem;
     private AudioSource audioSource;
+    private MoneyManager moneyManager;
 
     private void Update()
     {
@@ -36,6 +37,7 @@ public class InteractionSystem : MonoBehaviour
         playerController = GetComponent<PlayerController>();
         objectiveSystem = FindFirstObjectByType<ObjectiveSystem>();
         audioSource = GetComponent<AudioSource>();
+        moneyManager = FindFirstObjectByType<MoneyManager>();
     }
 
     private void CheckForInteraction()
@@ -218,6 +220,26 @@ public class InteractionSystem : MonoBehaviour
                     {
                         objectiveSystem.SetObjective(
                             npcInteraction.WorkshopCompletionObjective
+                        );
+                    }
+
+                    if (!npcInteraction.ProgressionSystem.WorkshopPaymentReceived)
+                    {
+                        if (moneyManager != null)
+                        {
+                            moneyManager.AddMoney(250);
+                        }
+
+                        npcInteraction.ProgressionSystem.MarkWorkshopPaymentReceived();
+
+                        Debug.Log(
+                            "Workshop Owner: Player was paid R250 for the completed crate."
+                        );
+                    }
+                    else
+                    {
+                        Debug.Log(
+                            "Workshop Owner: Workshop payment has already been received."
                         );
                     }
 
