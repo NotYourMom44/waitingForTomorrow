@@ -16,10 +16,17 @@ public class PlayerController : MonoBehaviour
     [Header("Animation")]
     [SerializeField] private Animator animator;
 
+    [Header("Footsteps")]
+    [SerializeField] private AudioSource footstepAudioSource;
+    [SerializeField] private AudioClip footstepClip;
+    [SerializeField] private float walkStepInterval = 0.5f;
+    [SerializeField] private float sprintStepInterval = 0.35f;
+
     private CharacterController characterController;
     private Vector3 velocity;
     private bool canMove = true;
     private float cameraPitch = 0f;
+    private float footstepTimer = 0f;
 
     private void Awake()
     {
@@ -42,6 +49,7 @@ public class PlayerController : MonoBehaviour
 
         HandleGravity();
         UpdateAnimation();
+        HandleFootsteps();
     }
 
     public void SetMovementEnabled(bool enabled)
@@ -52,6 +60,12 @@ public class PlayerController : MonoBehaviour
         {
             velocity.x = 0f;
             velocity.z = 0f;
+            footstepTimer = 0f;
+
+            if (footstepAudioSource != null)
+            {
+                footstepAudioSource.Stop();
+            }
 
             if (animator != null)
             {
@@ -207,5 +221,59 @@ public class PlayerController : MonoBehaviour
             "IsGrounded",
             characterController.isGrounded
         );
+    }
+
+    private void HandleFootsteps()
+    {
+        if (footstepAudioSource == null ||
+            footstepClip == null ||
+            !canMove ||
+            !characterController.isGrounded)
+        {
+            footstepTimer = 0f;
+            return;
+        }
+
+        Vector2 input = Vector2.zero;
+
+        if (Keyboard.current != null)
+        {
+            if (Keyboard.current.aKey.isPressed)
+                input.x -= 1f;
+
+            if (Keyboard.current.dKey.isPressed)
+                input.x += 1f;
+
+            if (Keyboard.current.sKey.isPressed)
+                input.y -= 1f;
+
+            if (Keyboard.current.wKey.isPressed)
+                input.y += 1f;
+        }
+
+        bool hasMovementInput = input.magnitude > 0f;
+
+        if (!hasMovementInput)
+        {
+            footstepTimer = 0f;
+            return;
+        }
+
+        bool isSprinting =
+            Keyboard.current != null &&
+            Keyboard.current.leftShiftKey.isPressed;
+
+        float stepInterval =
+            isSprinting
+                ? sprintStepInterval
+                : walkStepInterval;
+
+        footstepTimer += Time.deltaTime;
+
+        if (footstepTimer >= stepInterval)
+        {
+            footstepAudioSource.PlayOneShot(footstepClip);
+            footstepTimer = 0f;
+        }
     }
 }
