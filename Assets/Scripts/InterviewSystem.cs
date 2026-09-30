@@ -18,8 +18,19 @@ public class InterviewSystem : MonoBehaviour
 
     [SerializeField] private Button retryInterviewButton;
 
+    [SerializeField] private Button closeInterviewButton;
+
     [Header("Interview Camera")]
     [SerializeField] private CameraController cameraController;
+    [Header("Progression")]
+    [SerializeField] private GameProgressionSystem progressionSystem;
+
+    [SerializeField]
+    private string interviewCompletedObjective =
+        "Find a way to gain practical work experience.";
+
+    [Header("Interaction")]
+    [SerializeField] private InteractionSystem interactionSystem;
 
     [Header("Question 1")]
     [SerializeField]
@@ -94,10 +105,14 @@ public class InterviewSystem : MonoBehaviour
     private bool timerRunning = false;
     private int currentQuestion = 1;
 
+    private ObjectiveSystem objectiveSystem;
+
     private int interviewScore = 0;
 
     private void Start()
     {
+        objectiveSystem = FindFirstObjectByType<ObjectiveSystem>();
+
         if (retryInterviewButton != null)
         {
             retryInterviewButton.gameObject.SetActive(false);
@@ -106,6 +121,16 @@ public class InterviewSystem : MonoBehaviour
             retryInterviewButton.onClick.AddListener(
                 RetryInterview
             );
+        }
+
+        if (closeInterviewButton != null)
+        {
+            closeInterviewButton.onClick.RemoveAllListeners();
+            closeInterviewButton.onClick.AddListener(
+                CloseInterview
+            );
+
+            closeInterviewButton.gameObject.SetActive(false);
         }
     }
 
@@ -348,6 +373,21 @@ public class InterviewSystem : MonoBehaviour
 
             ShowFinalResult();
 
+            if (progressionSystem != null)
+            {
+                progressionSystem.CompleteInterview();
+            }
+
+            if (interactionSystem != null)
+            {
+                interactionSystem.CloseInterview();
+            }
+
+            if (objectiveSystem != null)
+            {
+                objectiveSystem.SetObjective(interviewCompletedObjective);
+            }
+
             Debug.Log(
                 "Interview questions completed."
             );
@@ -362,6 +402,11 @@ public class InterviewSystem : MonoBehaviour
 
     private void ShowFinalResult()
     {
+        if (closeInterviewButton != null)
+        {
+            closeInterviewButton.gameObject.SetActive(true);
+        }
+
         if (interviewFeedback == null)
             return;
 
@@ -416,5 +461,30 @@ public class InterviewSystem : MonoBehaviour
         HideRetryButton();
 
         LoadQuestion1();
+    }
+
+    public void CloseInterview()
+    {
+        if (interviewPanel != null)
+        {
+            interviewPanel.SetActive(false);
+        }
+
+        if (interactionSystem != null)
+        {
+            interactionSystem.CloseInterview();
+        }
+
+        if (cameraController != null)
+        {
+            cameraController.SetInterviewMode(false);
+        }
+
+        if (closeInterviewButton != null)
+        {
+            closeInterviewButton.gameObject.SetActive(false);
+        }
+
+        Debug.Log("Interview panel closed.");
     }
 }

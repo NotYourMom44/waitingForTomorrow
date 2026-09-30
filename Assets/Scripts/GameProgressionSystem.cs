@@ -11,6 +11,8 @@ public class GameProgressionSystem : MonoBehaviour
 
     public bool InterviewStarted { get; private set; }
 
+    public bool InterviewCompleted { get; private set; }
+
     public bool WorkshopLeadReceived { get; private set; }
 
     public int WorkshopPanelsCollected { get; private set; }
@@ -68,6 +70,12 @@ public class GameProgressionSystem : MonoBehaviour
     {
         InterviewStarted = true;
         Debug.Log("Interview started.");
+    }
+
+    public void CompleteInterview()
+    {
+        InterviewCompleted = true;
+        Debug.Log("Interview marked as completed.");
     }
 
     public void ReceiveWorkshopLead()

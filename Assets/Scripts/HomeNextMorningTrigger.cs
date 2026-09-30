@@ -3,6 +3,7 @@ using UnityEngine;
 public class HomeNextMorningTrigger : MonoBehaviour
 {
     [SerializeField] private ScreenFadeTransition fadeTransition;
+    [SerializeField] private GameProgressionSystem progressionSystem;
 
     private bool triggered = false;
 
@@ -12,6 +13,12 @@ public class HomeNextMorningTrigger : MonoBehaviour
             return;
 
         if (!other.CompareTag("Player"))
+            return;
+
+        if (progressionSystem == null)
+            return;
+
+        if (!progressionSystem.NewJobOpportunityUnlocked)
             return;
 
         triggered = true;

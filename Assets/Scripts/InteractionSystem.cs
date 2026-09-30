@@ -273,7 +273,9 @@ public class InteractionSystem : MonoBehaviour
                     );
                 }
             }
-            else if (npcInteraction.CompletesWorkshopTask)
+            else if (npcInteraction.CompletesWorkshopTask &&
+                     npcInteraction.ProgressionSystem != null &&
+                     npcInteraction.ProgressionSystem.WorkshopLeadReceived)
             {
                 if (npcInteraction.ProgressionSystem != null &&
                     npcInteraction.ProgressionSystem.WorkshopCrateAssembled)
@@ -392,6 +394,28 @@ public class InteractionSystem : MonoBehaviour
 
                     Debug.Log(
                         "Building Supplies Owner: Player has successfully completed the timed trial."
+                    );
+                }
+                else if (npcInteraction.ProgressionSystem != null &&
+                         npcInteraction.ProgressionSystem.NewJobOpportunityUnlocked &&
+                         npcInteraction.IsBuildingSuppliesOwner)
+                {
+                    if (interactionText != null)
+                    {
+                        interactionText.text =
+                            npcInteraction.InteractionMessage;
+                    }
+
+                    if (objectiveSystem != null &&
+                        npcInteraction.UpdatesObjective)
+                    {
+                        objectiveSystem.SetObjective(
+                            npcInteraction.NewObjective
+                        );
+                    }
+
+                    Debug.Log(
+                        "Building Supplies Owner: New job opportunity introduced."
                     );
                 }
                 else if (npcInteraction.ProgressionSystem != null &&
@@ -575,6 +599,28 @@ public class InteractionSystem : MonoBehaviour
         {
             playerController.SetMovementEnabled(true);
         }
+    }
+
+    public void CloseInterview()
+    {
+        if (interactionPanel != null)
+        {
+            interactionPanel.SetActive(false);
+        }
+
+        isInteracting = false;
+
+        if (interactionPrompt != null)
+        {
+            interactionPrompt.SetActive(false);
+        }
+
+        if (playerController != null)
+        {
+            playerController.SetMovementEnabled(true);
+        }
+
+        Debug.Log("Interview interaction closed.");
     }
 
     public void CloseJobApplication()
