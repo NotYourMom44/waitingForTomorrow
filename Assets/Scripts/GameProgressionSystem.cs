@@ -23,6 +23,8 @@ public class GameProgressionSystem : MonoBehaviour
 
     public bool NewJobOpportunityUnlocked { get; private set; }
 
+    public bool NextMorningStarted { get; private set; }
+
     public void CompleteComputerSkills()
     {
         ComputerSkillsCompleted = true;
@@ -108,5 +110,12 @@ public class GameProgressionSystem : MonoBehaviour
         NewJobOpportunityUnlocked = true;
 
         Debug.Log("New job opportunity unlocked.");
+    }
+
+    public void MarkNextMorningStarted()
+    {
+        NextMorningStarted = true;
+
+        Debug.Log("Next morning sequence completed.");
     }
 }

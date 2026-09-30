@@ -57,6 +57,14 @@ public class ScreenFadeTransition : MonoBehaviour
 
         yield return StartCoroutine(Fade(1f, 0f));
 
+        GameProgressionSystem progressionSystem =
+        FindFirstObjectByType<GameProgressionSystem>();
+
+        if (progressionSystem != null)
+        {
+            progressionSystem.MarkNextMorningStarted();
+        }
+
         if (objectiveSystem != null)
         {
             objectiveSystem.SetObjective(nextMorningObjective);
