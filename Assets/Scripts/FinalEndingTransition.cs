@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class FinalEndingTransition : MonoBehaviour
 {
@@ -54,6 +55,8 @@ public class FinalEndingTransition : MonoBehaviour
         }
 
         yield return new WaitForSeconds(messageDuration);
+
+        SceneManager.LoadScene("MainMenu");
     }
 
     private IEnumerator Fade(float startAlpha, float endAlpha)
