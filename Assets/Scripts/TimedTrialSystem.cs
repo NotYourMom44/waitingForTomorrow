@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class TimedTrialSystem : MonoBehaviour
 {
@@ -9,10 +10,18 @@ public class TimedTrialSystem : MonoBehaviour
     [Header("UI")]
     [SerializeField] private TMP_Text timerText;
 
+    [Header("Retry")]
+    [SerializeField] private TMP_Text failureText;
+    [SerializeField] private TMP_Text retryText;
+    [SerializeField] private Transform player;
+    [SerializeField] private Transform retrySpawnPoint;
+
     private float timeRemaining;
     private bool trialRunning;
 
     public bool TrialRunning => trialRunning;
+
+    public bool TrialFailed { get; private set; }
 
     private void Start()
     {
@@ -20,10 +29,26 @@ public class TimedTrialSystem : MonoBehaviour
         {
             timerText.gameObject.SetActive(false);
         }
+
+        if (failureText != null)
+        {
+            failureText.gameObject.SetActive(false);
+        }
+
+        if (retryText != null)
+        {
+            retryText.gameObject.SetActive(false);
+        }
     }
 
     private void Update()
     {
+        if (TrialFailed && Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame)
+        {
+            RetryTrial();
+            return;
+        }
+
         if (!trialRunning)
             return;
 
@@ -33,13 +58,35 @@ public class TimedTrialSystem : MonoBehaviour
         {
             timeRemaining = 0f;
             trialRunning = false;
+            TrialFailed = true;
 
             if (timerText != null)
             {
-                timerText.text = "Time's up! Return home and try again.";
+                timerText.gameObject.SetActive(false);
             }
 
-            Debug.Log("Timed trial failed.");
+            if (failureText != null)
+            {
+                failureText.gameObject.SetActive(true);
+            }
+
+            if (retryText != null)
+            {
+                retryText.gameObject.SetActive(true);
+            }
+
+            PlayerController playerController =
+                player != null
+                    ? player.GetComponent<PlayerController>()
+                    : null;
+
+            if (playerController != null)
+            {
+                playerController.SetMovementEnabled(false);
+            }
+
+            Debug.Log("Timed trial failed. Waiting for retry.");
+
             return;
         }
 
@@ -48,6 +95,8 @@ public class TimedTrialSystem : MonoBehaviour
 
     public void StartTrial()
     {
+        TrialFailed = false;
+
         timeRemaining = timeLimit;
         trialRunning = true;
 
@@ -73,6 +122,53 @@ public class TimedTrialSystem : MonoBehaviour
         }
 
         Debug.Log("Timed trial completed.");
+    }
+
+    private void RetryTrial()
+    {
+        if (!TrialFailed)
+            return;
+
+        if (player == null || retrySpawnPoint == null)
+            return;
+
+        CharacterController characterController =
+            player.GetComponent<CharacterController>();
+
+        if (characterController != null)
+        {
+            characterController.enabled = false;
+        }
+
+        player.position = retrySpawnPoint.position;
+        player.rotation = retrySpawnPoint.rotation;
+
+        if (characterController != null)
+        {
+            characterController.enabled = true;
+        }
+
+        if (failureText != null)
+        {
+            failureText.gameObject.SetActive(false);
+        }
+
+        if (retryText != null)
+        {
+            retryText.gameObject.SetActive(false);
+        }
+
+        PlayerController playerController =
+            player.GetComponent<PlayerController>();
+
+        if (playerController != null)
+        {
+            playerController.SetMovementEnabled(true);
+        }
+
+        StartTrial();
+
+        Debug.Log("Timed trial restarted.");
     }
 
     private void UpdateTimerText()

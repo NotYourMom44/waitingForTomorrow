@@ -17,6 +17,9 @@ public class NPCInteraction : MonoBehaviour
     [TextArea(2, 4)]
     private string newObjective;
 
+    [Header("Building Supplies Owner")]
+    [SerializeField] private bool isBuildingSuppliesOwner = false;
+
     [Header("Special Interaction")]
     [SerializeField] private bool opensJobApplication = false;
     [SerializeField] private bool providesWorkshopLead = false;
@@ -53,6 +56,24 @@ public class NPCInteraction : MonoBehaviour
     private string newJobOpportunityObjective =
     "Look for the new job opportunity.";
 
+    [Header("Ending Character")]
+    [SerializeField] private GameObject communityEmploymentContact;
+
+    [SerializeField] private DialogueSequence dialogueSequence;
+
+    [SerializeField] private bool usesDialogueSequence = false;
+
+    [Header("Building Supplies Progression")]
+    [SerializeField]
+    [TextArea(2, 5)]
+    private string buildingSuppliesCompletedMessage =
+    "You made it here early. That's what I was looking for. I can give you a chance to prove yourself.";
+
+    [SerializeField]
+    [TextArea(2, 4)]
+    private string buildingSuppliesCompletedObjective =
+        "Speak to the building supplies owner about the opportunity.";
+
     [Header("Interview Progression")]
     [SerializeField]
     [TextArea(2, 5)]
@@ -80,13 +101,31 @@ public class NPCInteraction : MonoBehaviour
 
     public bool CompletesWorkshopTask => completesWorkshopTask;
     public GameProgressionSystem ProgressionSystem => progressionSystem;
+
+    public DialogueSequence DialogueSequence => dialogueSequence;
+
+    public bool UsesDialogueSequence => usesDialogueSequence;
+
     public string CompletedApplicationMessage => completedApplicationMessage;
     public string CompletedApplicationObjective => completedApplicationObjective;
 
     public string NewJobOpportunityObjective => newJobOpportunityObjective;
 
+    public string BuildingSuppliesCompletedMessage => buildingSuppliesCompletedMessage;
+    public string BuildingSuppliesCompletedObjective => buildingSuppliesCompletedObjective;
+
     public string WorkshopCompletionMessage => workshopCompletionMessage;
     public string WorkshopCompletionObjective => workshopCompletionObjective;
     public string ReadyForInterviewMessage => readyForInterviewMessage;
     public string ReadyForInterviewObjective => readyForInterviewObjective;
+
+    public bool IsBuildingSuppliesOwner => isBuildingSuppliesOwner;
+
+    public void ActivateCommunityEmploymentContact()
+    {
+        if (communityEmploymentContact != null)
+        {
+            communityEmploymentContact.SetActive(true);
+        }
+    }
 }

@@ -140,7 +140,19 @@ public class InteractionSystem : MonoBehaviour
         }
         else if (npcInteraction != null)
         {
-            if (npcInteraction.HandlesDocumentPayment)
+            if (npcInteraction.UsesDialogueSequence)
+            {
+                if (npcInteraction.DialogueSequence != null)
+                {
+                    npcInteraction.DialogueSequence.StartDialogue();
+                }
+
+                Debug.Log(
+                    "Started dialogue sequence with: " +
+                    npcInteraction.NPCName
+                );
+            }
+            else if (npcInteraction.HandlesDocumentPayment)
             {
                 if (npcInteraction.ProgressionSystem != null &&
                     npcInteraction.ProgressionSystem.DocumentExpensePaid)
@@ -261,7 +273,6 @@ public class InteractionSystem : MonoBehaviour
                     );
                 }
             }
-
             else if (npcInteraction.CompletesWorkshopTask)
             {
                 if (npcInteraction.ProgressionSystem != null &&
@@ -317,7 +328,6 @@ public class InteractionSystem : MonoBehaviour
                     );
                 }
             }
-
             else if (npcInteraction.ProvidesWorkshopLead)
             {
                 if (npcInteraction.ProgressionSystem != null &&
@@ -362,7 +372,30 @@ public class InteractionSystem : MonoBehaviour
             else
             {
                 if (npcInteraction.ProgressionSystem != null &&
-                    npcInteraction.ProgressionSystem.JobApplicationCompleted)
+                    npcInteraction.ProgressionSystem.BuildingSuppliesTrialCompleted &&
+                    npcInteraction.IsBuildingSuppliesOwner)
+                {
+                    if (interactionText != null)
+                    {
+                        interactionText.text =
+                            npcInteraction.BuildingSuppliesCompletedMessage;
+                    }
+
+                    if (objectiveSystem != null)
+                    {
+                        objectiveSystem.SetObjective(
+                            npcInteraction.BuildingSuppliesCompletedObjective
+                        );
+                    }
+
+                    npcInteraction.ActivateCommunityEmploymentContact();
+
+                    Debug.Log(
+                        "Building Supplies Owner: Player has successfully completed the timed trial."
+                    );
+                }
+                else if (npcInteraction.ProgressionSystem != null &&
+                         npcInteraction.ProgressionSystem.JobApplicationCompleted)
                 {
                     if (interactionText != null)
                     {
@@ -430,7 +463,6 @@ public class InteractionSystem : MonoBehaviour
                 documentInteraction.DocumentName
             );
         }
-
         else if (workshopPanelInteraction != null)
         {
             if (interactionText != null)
@@ -448,7 +480,6 @@ public class InteractionSystem : MonoBehaviour
                 workshopPanelInteraction.PanelName
             );
         }
-
         else if (workshopWorkbenchInteraction != null)
         {
             if (interactionText != null)
@@ -601,5 +632,27 @@ public class InteractionSystem : MonoBehaviour
         {
             playerController.SetMovementEnabled(false);
         }
+    }
+
+    public void CloseDialogueInteraction()
+    {
+        if (interactionPanel != null)
+        {
+            interactionPanel.SetActive(false);
+        }
+
+        if (interactionPrompt != null)
+        {
+            interactionPrompt.SetActive(false);
+        }
+
+        isInteracting = false;
+
+        if (playerController != null)
+        {
+            playerController.SetMovementEnabled(true);
+        }
+
+        Debug.Log("Dialogue interaction closed.");
     }
 }

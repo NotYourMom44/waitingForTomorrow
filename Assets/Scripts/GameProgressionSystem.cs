@@ -25,6 +25,8 @@ public class GameProgressionSystem : MonoBehaviour
 
     public bool NextMorningStarted { get; private set; }
 
+    public bool BuildingSuppliesTrialCompleted { get; private set; }
+
     public void CompleteComputerSkills()
     {
         ComputerSkillsCompleted = true;
@@ -117,5 +119,12 @@ public class GameProgressionSystem : MonoBehaviour
         NextMorningStarted = true;
 
         Debug.Log("Next morning sequence completed.");
+    }
+
+    public void MarkBuildingSuppliesTrialCompleted()
+    {
+        BuildingSuppliesTrialCompleted = true;
+
+        Debug.Log("Building supplies timed trial completed.");
     }
 }
